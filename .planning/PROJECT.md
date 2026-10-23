@@ -16,7 +16,7 @@ A farmer gets a correct, trustworthy disease diagnosis from a leaf photo, and an
 
 ### Active
 
-- [ ] Dataset `Project-AgML/plant_village_classification` is downloaded automatically on startup (idempotent, cached) before anything else runs
+- [ ] Dataset `Project-AgML/plant_village_classification` is downloaded automatically by every training/eval/dev entrypoint (idempotent, cached) before anything else runs; the deployed Space downloads only the model and knowledge snapshot
 - [ ] Fine-tune a Hugging Face image-classification transformer (ViT / Swin / ConvNeXt family; benchmark 2-3 candidates) on the dataset, with augmentation aimed at real field photos
 - [ ] Confidence gate: below a threshold (or for non-leaf images) the app declines to diagnose and asks for a clearer photo
 - [ ] Farmer uploads an image and receives disease label, confidence, and a short summary
@@ -50,6 +50,7 @@ A farmer gets a correct, trustworthy disease diagnosis from a leaf photo, and an
 - **Platform**: Hugging Face (datasets, model hub, Inference API, Spaces) — team decision
 - **Frontend**: Gradio — fast to build, native to Spaces
 - **Deployment**: Single HF Space — simplest to operate; free/low tier limits compute, so inference must be lightweight
+- **Account**: Team is on a FREE Hugging Face account. Research (HF docs, 2026-10-23) reports Gradio/Docker Space creation needs a paid plan and Inference Providers gives free users no credits. Unverified for this account — Phase 1 verifies with a hello-world deploy and, if blocked, picks a fallback (ZeroGPU Space, Static Space + external backend, or other hosting) before architecture hardens. LLM access sits behind a provider interface so the backend can change without touching chat logic.
 - **Repo layout**: `backend/` and `frontend/` fully separated — keeps a later two-Space split cheap
 - **Config**: all secrets and tunables via `.env` / `.env.example` — team onboarding
 - **Safety**: remedy advice touches pesticides and crop loss — must cite sources and avoid unsourced dosage claims
@@ -65,7 +66,9 @@ A farmer gets a correct, trustworthy disease diagnosis from a leaf photo, and an
 | One HF Space, separate `backend/` and `frontend/` folders | Simple deploy now, cheap split later | — Pending |
 | Augmentation + confidence gate for field photos | PlantVillage is lab imagery; avoid confident wrong diagnoses | — Pending |
 | RAG: curated scheduled scrape + live search fallback | Trustworthy default, coverage fallback | — Pending |
-| Dataset downloaded automatically on startup | Reproducible onboarding for the team | — Pending |
+| Dataset auto-download in training/eval/dev entrypoints, not at Space boot | 823 MB is only needed for training; Space disk is ephemeral and boot would risk cold-start timeouts | — Pending |
+| Free HF account; hosting/LLM funding verified in Phase 1 | Research says Space creation and Inference credits need a paid plan; unverified | ⚠️ Revisit |
+| Evidence-driven model choice: field-set macro-F1, calibration, CPU latency (not PlantVillage accuracy) | PlantVillage accuracy is inflated by leakage and lab backgrounds | — Pending |
 
 ## Evolution
 
@@ -85,4 +88,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-23 after initialization*
+*Last updated: 2026-10-23 after research (free-account and dataset-download decisions)*
