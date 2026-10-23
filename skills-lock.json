@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "finetuning": {
+      "source": "evo-hq/evo",
+      "sourceType": "github",
+      "skillPath": "plugins/evo/skills/finetuning/SKILL.md",
+      "computedHash": "76f536cbfd9e751a9b9e51c42cb6fd55697c08baab441cdc760241ee61dcd24e"
+    }
+  }
+}
