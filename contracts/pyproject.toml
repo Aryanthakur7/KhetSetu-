@@ -1,0 +1,19 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "khetsetu-contracts"
+dynamic = ["version"]
+description = "KhetSetu contracts: typed DTOs and service Protocols shared by frontend and backend."
+requires-python = ">=3.12,<3.13"
+# The contracts layer stays pure: no torch, Hugging Face, UI libraries or Pillow.
+dependencies = [
+    "pydantic>=2.11.10,<3",
+]
+
+[tool.hatch.version]
+path = "src/khetsetu_contracts/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/khetsetu_contracts"]

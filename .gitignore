@@ -1,0 +1,63 @@
+# KhetSetu ignore rules (OPS-03). This file is the first commit of the repository
+# hygiene work: data, weights and secrets must never be staged by accident.
+#
+# Directory rules are anchored to the repo root with a leading slash so they cannot
+# swallow source packages such as backend/src/khetsetu_backend/data/.
+
+# --- Datasets, build output and local artefacts (root-anchored) ---
+/data/
+/build/
+/.tools/
+/models/
+/checkpoints/
+/runs/
+/outputs/
+
+# --- Secrets and credentials ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.netrc
+
+# --- Model weights and table formats ---
+*.parquet
+*.arrow
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.gguf
+*.h5
+
+# --- Hugging Face caches ---
+.cache/
+
+# --- Python and tool caches ---
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# --- Gradio and runtime artefacts ---
+.gradio/
+flagged/
+gradio_cached_examples/
+chroma/
+*.sqlite3
+wandb/
+
+# --- Editors and OS ---
+.idea/
+.vscode/
+.DS_Store

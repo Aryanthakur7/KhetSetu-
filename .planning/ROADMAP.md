@@ -40,15 +40,15 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Running any training, evaluation or dev entrypoint first downloads `Project-AgML/plant_village_classification`; a second run reuses the cache and downloads nothing.
   5. A change that breaks ruff, strict mypy, pytest, import-linter or the secret scan is blocked in CI, and `data/`, model weights and secrets cannot be committed by accident.
 
-**Plans**: 7 plans
+**Plans**: 3/7 plans executed
 
 Plans:
 **Wave 1**
-- [ ] 01-01-PLAN.md — `.gitignore` first (`data/`, weights, secrets), uv workspace with `backend/`, `frontend/`, `contracts/`, tool configuration and one lockfile
+- [x] 01-01-PLAN.md — `.gitignore` first (`data/`, weights, secrets), uv workspace with `backend/`, `frontend/`, `contracts/`, tool configuration and one lockfile
 
 **Wave 2** *(blocked on Wave 1 completion)*
-- [ ] 01-02-PLAN.md — typed Settings with fail-fast validation, committed `.env.example`, `khetsetu config check`, onboarding docs
-- [ ] 01-03-PLAN.md — CI gates: ruff, mypy strict, pytest, import-linter (frontend depends on contracts only), gitleaks secret scan, pre-commit, with canary tests proving each gate bites
+- [x] 01-02-PLAN.md — typed Settings with fail-fast validation, committed `.env.example`, `khetsetu config check`, onboarding docs
+- [x] 01-03-PLAN.md — CI gates: ruff, mypy strict, pytest, import-linter (frontend depends on contracts only), gitleaks secret scan, pre-commit, with canary tests proving each gate bites
 
 **Wave 3** *(blocked on Wave 2 completion)*
 - [ ] 01-04-PLAN.md — Tracer slice: fake services behind `contracts/`, single composition root, hello-world Gradio upload-to-result app running locally
@@ -197,7 +197,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 (Phase 5 ingest
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Walking Skeleton & Hosting Verification | 0/7 | Planned | - |
+| 1. Walking Skeleton & Hosting Verification | 3/7 | In Progress | - |
 | 2. Trustworthy Data & Field Probe | 0/4 | Not started | - |
 | 3. Gated Classifier | 0/5 | Not started | - |
 | 4. Farmer Diagnosis | 0/4 | Not started | - |

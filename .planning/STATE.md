@@ -3,16 +3,16 @@ gsd_state_version: "1.0"
 current_phase: 1
 current_phase_name: Walking Skeleton & Hosting Verification
 status: executing
-stopped_at: Roadmap and state initialized; ready for `/gsd-plan-phase 1`
-last_updated: "2026-10-23T19:01:09.153Z"
-last_activity: 2026-10-23
-last_activity_desc: Roadmap created (7 phases, 32/32 v1 requirements mapped)
-state_head: f1be4e2b779bc013abf8b6a3d356b2b4a1141c84
+stopped_at: Completed 01-02-PLAN.md (uncommitted by user request)
+last_updated: "2026-10-23T19:13:48.786Z"
+last_activity: 2026-10-24
+last_activity_desc: Phase 1 execution started
+state_head: df765d608436fe10f308cc2c062ed55d29b83279
 progress:
   total_phases: 7
   completed_phases: 0
   total_plans: 7
-  completed_plans: 0
+  completed_plans: 2
   percent: 0
 ---
 
@@ -23,14 +23,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-23)
 
 **Core value:** A farmer gets a correct, trustworthy disease diagnosis from a leaf photo, and an honest "I'm not sure, send a clearer photo" instead of a confident wrong answer.
-**Current focus:** Phase 1 - Walking Skeleton & Hosting Verification
+**Current focus:** Phase 1 — Walking Skeleton & Hosting Verification
 
 ## Current Position
 
-Phase: 1 (Walking Skeleton & Hosting Verification) — READY TO EXECUTE
-Plan: Not yet planned (roadmap estimate: 5 plans)
+Phase: 1 (Walking Skeleton & Hosting Verification) — EXECUTING
+Plan: 3 of 7
 Status: Ready to execute
-Last activity: 2026-10-23 - Roadmap created (7 phases, 32/32 v1 requirements mapped)
+Last activity: 2026-10-24 — Phase 1 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -52,6 +52,12 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 1 P01-01 | 4min | 3 tasks | 18 files |
+| Phase 1 P01-02 | 15min | 3 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -65,6 +71,9 @@ Recent decisions affecting current work:
 - [Roadmap]: Diagnosis track (2-3-4) and ingest side of the knowledge track (05-01 to 05-04) can run in parallel after Phase 1.
 - [Roadmap]: Research's separate "Hardening" phase folded away; only OPS-02 (docs) remained as a v1 requirement, so it joins Phase 7 with the chat resilience work.
 - [Roadmap]: DATA-04 (supported-crops list) lands in Phase 2 and OPS-01 (warming-up page) in Phase 4, where each first becomes user-visible.
+- [Phase 1]: [01-01] Constrain pydantic<=2.12.5 (uv constraint-dependencies): gradio[oauth,mcp]==6.30.0, which the Space installs first, is unsatisfiable with pydantic 2.14.1
+- [Phase 1]: [01-02] Env var contract: KHETSETU_ prefix; HF_TOKEN and HF_SPACE_ID (alias SPACE_ID) unprefixed; SettingsError names env vars and never echoes inputs or secrets
+- [Phase 1]: [01-02] Deployed Space rejects KHETSETU_DATASET_MODE=blocking; effective mode is blocking on local, off on ci and space
 
 ### Pending Todos
 
@@ -89,6 +98,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-23
-Stopped at: Roadmap and state initialized; ready for `/gsd-plan-phase 1`
+Last session: 2026-10-23T19:13:48.723Z
+Stopped at: Completed 01-02-PLAN.md (uncommitted by user request)
 Resume file: None

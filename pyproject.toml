@@ -1,0 +1,189 @@
+[project]
+name = "khetsetu"
+version = "0.1.0"
+description = "KhetSetu: plant-disease assistant for farmers (application root and uv workspace root)."
+# 3.13 and 3.14 wheels lag for the torch/Pillow stack (STACK.md), so pin to 3.12.
+requires-python = ">=3.12,<3.13"
+dependencies = ["khetsetu-backend", "khetsetu-contracts", "khetsetu-frontend"]
+
+[tool.uv]
+# The root project is the deployable application (app.py); it is not a wheel.
+package = false
+required-version = ">=0.11"
+# HF builds a Gradio Space by first installing `gradio[oauth,mcp]` at the sdk_version,
+# then requirements.txt. The `mcp` extra of gradio 6.30.0 caps pydantic at <=2.12.5, so a
+# requirements.txt pinning pydantic 2.14.1 (STACK.md) is unsatisfiable on the Space.
+# Verified by `uv pip install --dry-run "gradio[oauth,mcp]==6.30.0" -r <exported runtime>`
+# (plan 01-01 task 3). Revisit when the gradio pin moves.
+constraint-dependencies = ["pydantic>=2.11.10,<=2.12.5"]
+
+[tool.uv.workspace]
+members = ["backend", "contracts", "frontend"]
+
+[tool.uv.sources]
+khetsetu-backend = { workspace = true }
+khetsetu-contracts = { workspace = true }
+khetsetu-frontend = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1,<10",
+    "pytest-cov>=7.1.0,<8",
+    "ruff>=0.17.2,<0.18",
+    "mypy>=2.4.0,<3",
+    "import-linter>=2.15,<3",
+    "pre-commit>=4.7.0,<5",
+    "pip-audit>=2.10.1,<3",
+    "types-PyYAML>=6,<7",
+    "gradio-client",  # unpinned on purpose: gradio fixes its own version
+    "khetsetu-backend[data]",
+]
+
+# --------------------------------------------------------------------------- ruff
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["contracts/src", "backend/src", "frontend/src", "scripts", "."]
+# Third-party agent skills and planning artefacts are not project source.
+extend-exclude = [".claude", ".planning"]
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "W", "I", "UP", "B", "SIM", "C4", "PTH", "RUF", "S", "ANN", "D",
+    "PL", "T20", "TCH", "PERF",
+]
+
+[tool.ruff.lint.pydocstyle]
+# The google convention already disables the conflicting D203/D213 pairs.
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+# Tests assert with bare `assert`, are exempt from annotation/docstring rigour on
+# fixtures, and compare against literal values.
+"tests/**" = ["S101", "ANN", "D", "PLR2004"]
+"**/tests/**" = ["S101", "ANN", "D", "PLR2004"]
+"conftest.py" = ["S101", "ANN", "D", "PLR2004"]
+# Scripts print JSON on stdout as their interface.
+"scripts/**" = ["T201"]
+
+[tool.ruff.format]
+
+# --------------------------------------------------------------------------- mypy
+[tool.mypy]
+strict = true
+python_version = "3.12"
+plugins = ["pydantic.mypy"]
+mypy_path = "contracts/src:backend/src:frontend/src"
+explicit_package_bases = true
+namespace_packages = true
+# Only paths that exist now: plan 01-06 adds scripts.
+files = [
+    "app.py",
+    "contracts/src",
+    "backend/src",
+    "frontend/src",
+    "contracts/tests",
+    "backend/tests",
+    "frontend/tests",
+    "tests",
+]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[[tool.mypy.overrides]]
+# Module names are rooted at the repo (explicit_package_bases), e.g. contracts.tests.test_x.
+module = ["*.tests.*", "tests.*", "conftest"]
+disallow_untyped_defs = false
+disallow_untyped_decorators = false
+
+# --------------------------------------------------------------------------- pytest
+[tool.pytest.ini_options]
+minversion = "9.0"
+testpaths = ["contracts/tests", "backend/tests", "frontend/tests", "tests"]
+pythonpath = ["."]  # so the root `app` module and `scripts` import
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--import-mode=importlib",
+    "-m",
+    "not network and not rehearsal",
+]
+markers = [
+    "network: needs outbound network access; opt in with `pytest -m network`",
+    "rehearsal: Space-faithful local rehearsal (slow); opt in with `pytest -m rehearsal`",
+    "e2e: end-to-end test that drives the real app over HTTP",
+    "gates: canary test proving a quality gate fails on a planted violation",
+    "dataset: needs the local 823 MB dataset under data/",
+]
+filterwarnings = [
+    "error",
+]
+
+# ------------------------------------------------------------------------- coverage
+[tool.coverage.run]
+source = ["khetsetu_contracts", "khetsetu_backend", "khetsetu_frontend"]
+branch = true
+
+[tool.coverage.report]
+# Coverage floor (FND-04). Later phases ratchet this up, never down.
+fail_under = 80
+show_missing = true
+skip_covered = true
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
+
+# ------------------------------------------------------------------------ import-linter
+[tool.importlinter]
+# FND-06 / B-01: the frontend/backend/contracts boundary is machine-enforced, not a convention.
+# External packages are named below, so the linter must be told to build them into the graph.
+root_packages = ["khetsetu_contracts", "khetsetu_backend", "khetsetu_frontend"]
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+id = "frontend-contracts-only"
+name = "Frontend depends on contracts only"
+type = "forbidden"
+source_modules = ["khetsetu_frontend"]
+forbidden_modules = [
+    "khetsetu_backend",
+    "torch",
+    "transformers",
+    "huggingface_hub",
+    "datasets",
+    "chromadb",
+    "sentence_transformers",
+]
+# Intent: the UI talks to the backend only through contract DTOs and a port, so it can move
+# to a second Space later without a refactor.
+
+[[tool.importlinter.contracts]]
+id = "backend-no-ui"
+name = "Backend has no UI"
+type = "forbidden"
+source_modules = ["khetsetu_backend"]
+forbidden_modules = ["khetsetu_frontend", "gradio"]
+# Intent: domain and service code must stay runnable headless (CLI, training, jobs).
+
+[[tool.importlinter.contracts]]
+id = "contracts-leaf"
+name = "Contracts is a leaf"
+type = "forbidden"
+source_modules = ["khetsetu_contracts"]
+forbidden_modules = [
+    "khetsetu_backend",
+    "khetsetu_frontend",
+    "gradio",
+    "PIL",
+    "torch",
+    "transformers",
+    "huggingface_hub",
+    "datasets",
+    "typer",
+]
+# Intent: contracts is pure pydantic plus the standard library, importable from everywhere.

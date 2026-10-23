@@ -1,0 +1,48 @@
+{
+  "contract": "1.0.0",
+  "flavor": "core",
+  "milestone": null,
+  "phases": [
+    {
+      "number": "1",
+      "name": "Walking Skeleton & Hosting Verification",
+      "status": "in_progress"
+    },
+    {
+      "number": "2",
+      "name": "Trustworthy Data & Field Probe",
+      "status": "pending"
+    },
+    {
+      "number": "3",
+      "name": "Gated Classifier",
+      "status": "pending"
+    },
+    {
+      "number": "4",
+      "name": "Farmer Diagnosis",
+      "status": "pending"
+    },
+    {
+      "number": "5",
+      "name": "Knowledge Snapshot",
+      "status": "pending"
+    },
+    {
+      "number": "6",
+      "name": "Cited Safe Chat",
+      "status": "pending"
+    },
+    {
+      "number": "7",
+      "name": "Resilient Chat & Release Readiness",
+      "status": "pending"
+    }
+  ],
+  "next": {
+    "command": "/gsd:progress --next",
+    "label": "Advance to the next step",
+    "reason": "Phase 1 of 7 · 0% · executing"
+  },
+  "updated_at": "2026-10-23T19:13:46.822Z"
+}

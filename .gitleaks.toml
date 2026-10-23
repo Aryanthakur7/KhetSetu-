@@ -1,0 +1,9 @@
+title = "KhetSetu gitleaks configuration"
+
+# Keep every default rule (Hugging Face tokens, cloud keys, private keys, generic API keys...).
+[extend]
+useDefault = true
+
+# Allowlist policy (docs/ci.md): entries are narrow (path AND content), justified here, and
+# listed in docs/ci.md. A finding that looks like a real credential is NEVER allowlisted:
+# revoke and rotate it instead.

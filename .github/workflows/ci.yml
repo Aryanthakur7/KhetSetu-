@@ -1,0 +1,73 @@
+name: CI
+
+# Thin caller of the Makefile targets: the Makefile is the single source of truth for gate
+# commands. No secrets are available to this workflow (HF tokens never reach CI in phase 1).
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      KHETSETU_APP_ENV: ci
+      KHETSETU_DATASET_MODE: "off"
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up uv
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          version: "0.11.20"
+          enable-cache: true
+      - name: Sync locked environment
+        run: make sync
+      - name: Lint (ruff check and format)
+        run: make lint
+      - name: Types (mypy strict)
+        run: make type
+      - name: Import boundaries (import-linter)
+        run: make imports
+      - name: Tests (pytest with coverage floor)
+        run: make test
+
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      KHETSETU_APP_ENV: ci
+      KHETSETU_DATASET_MODE: "off"
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up uv
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          version: "0.11.20"
+          enable-cache: true
+      - name: Sync locked environment
+        run: make sync
+      - name: Dependency audit (pip-audit)
+        run: make audit
+
+  secrets:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out (full history, so a secret in an old commit still fails)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Install pinned gitleaks (checksum verified)
+        run: scripts/install_gitleaks.sh
+      - name: Secret scan over full history (gitleaks)
+        run: make secrets

@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Foundation
 
-- [ ] **FND-01**: Developer can configure the whole app through typed, validated settings loaded from `.env`, and the app fails fast at startup with a clear message when a required setting is missing or invalid
-- [ ] **FND-02**: Developer can onboard from a committed `.env.example` that documents every setting, and no secret or token is ever committed (enforced by a secret scan)
+- [x] **FND-01**: Developer can configure the whole app through typed, validated settings loaded from `.env`, and the app fails fast at startup with a clear message when a required setting is missing or invalid
+- [x] **FND-02**: Developer can onboard from a committed `.env.example` that documents every setting, and no secret or token is ever committed (enforced by a secret scan)
 - [ ] **FND-03**: Developer can run any training, evaluation or dev entrypoint and have the dataset `Project-AgML/plant_village_classification` downloaded first, idempotently and from cache when already present
-- [ ] **FND-04**: Contributor's change is blocked in CI unless ruff, mypy (strict), pytest, import-linter and the secret scan all pass
+- [x] **FND-04**: Contributor's change is blocked in CI unless ruff, mypy (strict), pytest, import-linter and the secret scan all pass
 - [ ] **FND-05**: Developer can verify with a hello-world Space deploy whether a free Hugging Face account can host the Gradio app, how the `backend/` and `frontend/` packages install on the Space, and how LLM calls are funded, before dependent work is built
 - [ ] **FND-06**: Repo keeps `backend/` and `frontend/` as separate packages, with the frontend depending only on a typed `contracts/` layer and a single composition root wiring them together
 
@@ -58,7 +58,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **OPS-01**: Farmer sees a "warming up" page immediately on Space start while the model and knowledge snapshot load in the background
 - [ ] **OPS-02**: Team can onboard from README, architecture docs and `CLAUDE.md`/`AGENTS.md` that match the real code
-- [ ] **OPS-03**: Repo ignores `data/`, model weights and secrets so large or sensitive files cannot be committed by accident
+- [x] **OPS-03**: Repo ignores `data/`, model weights and secrets so large or sensitive files cannot be committed by accident
 
 ## v2 Requirements
 
@@ -105,12 +105,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FND-01 | Phase 1 | Pending |
-| FND-02 | Phase 1 | Pending |
+| FND-01 | Phase 1 | Complete |
+| FND-02 | Phase 1 | Complete |
 | FND-03 | Phase 1 | Pending |
-| FND-04 | Phase 1 | Pending |
+| FND-04 | Phase 1 | Complete |
 | FND-05 | Phase 1 | Pending |
-| FND-06 | Phase 1 | Pending |
+| FND-06 | Phase 1 | In Progress |
 | DATA-01 | Phase 2 | Pending |
 | DATA-02 | Phase 2 | Pending |
 | DATA-03 | Phase 2 | Pending |
@@ -136,7 +136,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CHAT-06 | Phase 7 | Pending |
 | OPS-01 | Phase 4 | Pending |
 | OPS-02 | Phase 7 | Pending |
-| OPS-03 | Phase 1 | Pending |
+| OPS-03 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 32 total
