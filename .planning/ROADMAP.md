@@ -38,14 +38,16 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Starting the app with a missing or invalid required setting fails at once with a message naming the setting, and a new developer can configure everything from the committed `.env.example` alone.
   4. Running any training, evaluation or dev entrypoint first downloads `Project-AgML/plant_village_classification`; a second run reuses the cache and downloads nothing.
   5. A change that breaks ruff, strict mypy, pytest, import-linter or the secret scan is blocked in CI, and `data/`, model weights and secrets cannot be committed by accident.
-**Plans**: 5 plans
+**Plans**: 7 plans
 
 Plans:
-- [ ] 01-01: uv workspace with `backend/`, `frontend/`, `contracts/`; typed Settings with fail-fast validation; `.env.example`; `.gitignore` for `data/`, weights and secrets (land before the next commit)
-- [ ] 01-02: Tracer slice: fake services behind `contracts/`, single composition root, hello-world Gradio upload-to-result app running locally
-- [ ] 01-03: CI gates: ruff, mypy strict, pytest, import-linter (frontend depends on contracts only), gitleaks secret scan
-- [ ] 01-04: Idempotent, cached `ensure_dataset()` wired into every training, evaluation and dev entrypoint
-- [ ] 01-05: Hello-world Space deploy on the real account; packaging spike (editable install vs `sys.path`); recorded hosting, packaging and LLM-funding decision with fallback
+- [ ] 01-01-PLAN.md — `.gitignore` first (`data/`, weights, secrets), uv workspace with `backend/`, `frontend/`, `contracts/`, tool configuration and one lockfile
+- [ ] 01-02-PLAN.md — typed Settings with fail-fast validation, committed `.env.example`, `khetsetu config check`, onboarding docs
+- [ ] 01-03-PLAN.md — CI gates: ruff, mypy strict, pytest, import-linter (frontend depends on contracts only), gitleaks secret scan, pre-commit, with canary tests proving each gate bites
+- [ ] 01-04-PLAN.md — Tracer slice: fake services behind `contracts/`, single composition root, hello-world Gradio upload-to-result app running locally
+- [ ] 01-05-PLAN.md — Idempotent, cached `ensure_dataset()` wired into every training, evaluation and dev entrypoint (decorator plus policy test); Space and CI never download
+- [ ] 01-06-PLAN.md — Space bundle builder, Space-faithful local rehearsal (packaging: editable install vs `sys.path`), probe tooling, architecture and hosting docs
+- [ ] 01-07-PLAN.md — Human gate (HF token), live Space deploy on the real account, packaging comparison on the real build, LLM-funding probe, recorded hosting, packaging and funding decision with fallback (ADR 0001)
 
 ### Phase 2: Trustworthy Data & Field Probe
 **Goal:** As a researcher, I want to evaluate any model on a frozen leak-free split and a held-out field probe set, so that model choices rest on honest field evidence rather than inflated PlantVillage accuracy.
@@ -170,7 +172,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 (Phase 5 ingest
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Walking Skeleton & Hosting Verification | 0/5 | Not started | - |
+| 1. Walking Skeleton & Hosting Verification | 0/7 | Planned | - |
 | 2. Trustworthy Data & Field Probe | 0/4 | Not started | - |
 | 3. Gated Classifier | 0/5 | Not started | - |
 | 4. Farmer Diagnosis | 0/4 | Not started | - |
