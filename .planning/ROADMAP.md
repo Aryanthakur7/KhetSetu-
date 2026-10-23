@@ -28,6 +28,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 1: Walking Skeleton & Hosting Verification
+
 **Goal:** As a developer, I want to push a change and watch it pass CI and run on a deployed hello-world Space, so that hosting, packaging and LLM funding are proven before real features are built.
 **Mode:** mvp
 **Depends on**: Nothing (first phase)
@@ -38,18 +39,31 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Starting the app with a missing or invalid required setting fails at once with a message naming the setting, and a new developer can configure everything from the committed `.env.example` alone.
   4. Running any training, evaluation or dev entrypoint first downloads `Project-AgML/plant_village_classification`; a second run reuses the cache and downloads nothing.
   5. A change that breaks ruff, strict mypy, pytest, import-linter or the secret scan is blocked in CI, and `data/`, model weights and secrets cannot be committed by accident.
+
 **Plans**: 7 plans
 
 Plans:
+**Wave 1**
 - [ ] 01-01-PLAN.md — `.gitignore` first (`data/`, weights, secrets), uv workspace with `backend/`, `frontend/`, `contracts/`, tool configuration and one lockfile
+
+**Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 01-02-PLAN.md — typed Settings with fail-fast validation, committed `.env.example`, `khetsetu config check`, onboarding docs
 - [ ] 01-03-PLAN.md — CI gates: ruff, mypy strict, pytest, import-linter (frontend depends on contracts only), gitleaks secret scan, pre-commit, with canary tests proving each gate bites
+
+**Wave 3** *(blocked on Wave 2 completion)*
 - [ ] 01-04-PLAN.md — Tracer slice: fake services behind `contracts/`, single composition root, hello-world Gradio upload-to-result app running locally
+
+**Wave 4** *(blocked on Wave 3 completion)*
 - [ ] 01-05-PLAN.md — Idempotent, cached `ensure_dataset()` wired into every training, evaluation and dev entrypoint (decorator plus policy test); Space and CI never download
+
+**Wave 5** *(blocked on Wave 4 completion)*
 - [ ] 01-06-PLAN.md — Space bundle builder, Space-faithful local rehearsal (packaging: editable install vs `sys.path`), probe tooling, architecture and hosting docs
+
+**Wave 6** *(blocked on Wave 5 completion)*
 - [ ] 01-07-PLAN.md — Human gate (HF token), live Space deploy on the real account, packaging comparison on the real build, LLM-funding probe, recorded hosting, packaging and funding decision with fallback (ADR 0001)
 
 ### Phase 2: Trustworthy Data & Field Probe
+
 **Goal:** As a researcher, I want to evaluate any model on a frozen leak-free split and a held-out field probe set, so that model choices rest on honest field evidence rather than inflated PlantVillage accuracy.
 **Mode:** mvp
 **Depends on**: Phase 1
@@ -59,6 +73,7 @@ Plans:
   2. A researcher can run any model, even a trivial baseline, through one evaluation command against the held-out field/OOD probe set (about 100-200 real field leaf photos plus about 50 non-leaf images, never used in training) and see macro-F1 and the in-domain versus field gap side by side.
   3. A developer can look up each of the 39 classes in `diseases.yaml` and get crop, pathogen type, English name and Hindi name, and a check fails if any class has no entry.
   4. A farmer opening the deployed Space sees the explicit list of supported crops, derived from the dataset, together with a statement that other crops are not covered.
+
 **Plans**: 4 plans
 **Research flag**: yes - public field datasets overlapping the 14 crops (PlantDoc and similar), near-duplicate detection method, and licensing of field data.
 
@@ -69,6 +84,7 @@ Plans:
 - [ ] 02-04: `diseases.yaml` for all 39 classes (EN/HI) with a completeness check; supported-crops list derived from the dataset and shown in the Space
 
 ### Phase 3: Gated Classifier
+
 **Goal:** As a researcher, I want to run one command that trains, calibrates and publishes a gated classifier, so that the app can refuse low-confidence photos instead of guessing.
 **Mode:** mvp
 **Depends on**: Phase 2 (frozen grouped split and field probe set must exist before any model selection)
@@ -79,6 +95,7 @@ Plans:
   3. Training applies field-style augmentation (background swap, lighting, blur), and the benchmark reports the field-set score with and without it.
   4. Given a leaf photo, a gated predict command returns accept, low-confidence or not-a-leaf using temperature scaling, the top-1/top-2 margin and a not-a-leaf class, with the threshold chosen from a risk-coverage curve on field data and its provenance stored in `gate.json`.
   5. A developer can fetch the trained model, model card and `gate.json` as versioned artifacts from the Hugging Face Hub.
+
 **Plans**: 5 plans
 **Research flag**: yes - OOD/non-leaf scoring method, background-swap augmentation, CPU latency and quantization, and calibration approach. Training compute (local GPU vs HF Jobs) is confirmed during planning.
 
@@ -90,6 +107,7 @@ Plans:
 - [ ] 03-05: Publish model, model card and `gate.json` as versioned Hub artifacts with a one-call fetch helper
 
 ### Phase 4: Farmer Diagnosis
+
 **Goal:** As a farmer, I want to upload a leaf photo and get a clear diagnosis or an honest request for a clearer photo, so that I never act on a confident wrong answer.
 **Mode:** mvp
 **Depends on**: Phase 3 (published model and gate), Phase 2 (`diseases.yaml`), Phase 1 (Space, contracts)
@@ -99,6 +117,7 @@ Plans:
   2. A farmer who uploads a blurry, non-leaf or unsupported-crop photo gets an explicit low-confidence, not-a-leaf or unsupported-crop message with retake tips, and never a guessed disease name.
   3. A farmer sees a short curated summary card for the diagnosed disease, including a clear "healthy" outcome for healthy leaves.
   4. On a cold Space start, the farmer sees a "warming up" page immediately, and the upload form becomes usable once the model finishes loading in the background, with no timeout or blank screen.
+
 **Plans**: 4 plans
 **UI hint**: yes
 
@@ -109,6 +128,7 @@ Plans:
 - [ ] 04-04: Staged bootstrap with readiness banner and "warming up" page; `preload_from_hub`; cold-start check on the deployed Space
 
 ### Phase 5: Knowledge Snapshot
+
 **Goal:** As a developer, I want to run one command that scrapes trusted sources into a versioned, citable knowledge snapshot, so that chat answers can be grounded in sources I can audit.
 **Mode:** mvp
 **Depends on**: Phase 1 (plans 05-01 to 05-04 are independent of the ML track and can run in parallel with Phases 2-4); Phase 2 and Phase 4 for plan 05-05 (`diseases.yaml` for the 39-class coverage report, and the bootstrap manager that hosts the startup pull)
@@ -119,6 +139,7 @@ Plans:
   3. A developer can run the Hindi/English retrieval evaluation that compares candidate embedding models, and the embedding model in use is the one that evaluation selected.
   4. Ingest produces typed dosage records separate from prose, so answers can quote a retrieved dose instead of generating one.
   5. One command scrapes, chunks, embeds and publishes a versioned snapshot, and a fresh Space process pulls it at startup and answers a Hindi and an English query with cited chunks; a report shows which of the 39 classes have sources.
+
 **Plans**: 5 plans
 **Research flag**: yes - concrete Indian sources with robots.txt and terms, legacy-font Devanagari PDFs and OCR fallback, CIB&RC banned/restricted pesticide lists, and the embedder bake-off (bge-m3, multilingual-e5, Qwen3-Embedding).
 
@@ -130,6 +151,7 @@ Plans:
 - [ ] 05-05: Snapshot loader and retriever pulled in the Space bootstrap (refuses an embedder mismatch); 39-class source coverage report
 
 ### Phase 6: Cited Safe Chat
+
 **Goal:** As a farmer, I want to ask about my diagnosed disease in Hindi or English and get remedy answers that cite their sources, so that I can trust the advice or be told plainly when none exists.
 **Mode:** mvp
 **Depends on**: Phase 4 (diagnosis result and UI), Phase 5 (knowledge store)
@@ -139,6 +161,7 @@ Plans:
   2. When retrieval cannot support an answer, the farmer sees a clear "no reliable source found" reply in their language instead of a guess.
   3. A dosage or numeric figure appears in an answer only if it exists in the retrieved sources; an answer containing an unsupported figure has it removed or blocked, confirmed by adversarial tests that must pass before the phase is complete.
   4. Every remedy answer ends with the bilingual pesticide-safety footer added by code, whatever the model wrote.
+
 **Plans**: 4 plans
 **UI hint**: yes
 **Research flag**: yes - Hindi quality of the candidate LLMs (30-question eval), and guardrail and validator design against a small red-team set.
@@ -150,6 +173,7 @@ Plans:
 - [ ] 06-04: Streaming Chat tab wired to the diagnosis result; Hindi golden-question evaluation
 
 ### Phase 7: Resilient Chat & Release Readiness
+
 **Goal:** As a farmer, I want chat to keep helping, or tell me plainly why it cannot, when curated sources run thin or the AI service is down, so that I am never left with an error or an unsourced guess.
 **Mode:** mvp
 **Depends on**: Phase 6
@@ -158,6 +182,7 @@ Plans:
   1. When curated data cannot answer, chat falls back to allowlisted live web search (`.gov.in`, `.ac.in`, FAO, ICAR), labels those results as lower trust, and never takes a dosage from them, even when a fetched page tries to inject instructions.
   2. When the LLM quota is exhausted or the API errors, the farmer sees a clear degraded-mode message instead of an error or a hang, diagnosis keeps working, and per-session rate limits and a budget guard cap spend.
   3. A new contributor can follow the README to run the app locally and on a Space, and the architecture docs and `CLAUDE.md`/`AGENTS.md` describe modules that actually exist in the repo.
+
 **Plans**: 3 plans
 
 Plans:
