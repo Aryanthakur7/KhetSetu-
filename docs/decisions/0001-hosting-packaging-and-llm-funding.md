@@ -1,6 +1,6 @@
 # ADR 0001: Hosting, packaging and LLM funding
 
-Status: Blocked
+Status: Accepted (updated 2026-10-25: team chose to stay on ZeroGPU and use the Gemini API for the LLM)
 Date: 2026-10-25
 
 An ADR ("architecture decision record") is a short note that says what we decided, why, and what we do if it stops working. This one answers three questions for the team's real Hugging Face account: can it host our Gradio app, how do our `backend/` and `frontend/` folders get installed on the Space, and how will the chatbot's LLM calls be paid for?
@@ -66,7 +66,16 @@ Whichever option is chosen, the Phase 7 budget limit and per-session rate limits
 Hosting decision: Use a private ZeroGPU Gradio Space (`HimanshuGoyal2004/khetsetu-skeleton`) as interim hosting, with the sys.path packaging. It runs the hello-world today at no cost. Move to a normal CPU Basic Space as soon as the namespace has a PRO plan (the app code does not change; only the hardware setting changes). Limits seen or documented: the app needs one `@spaces.GPU` function (done), the platform pins torch to 2.13.0 or older, and research says free accounts get at most two ZeroGPU Spaces (documented, not tested by us).
 Fallback: if the ZeroGPU Space stops being allowed or cannot run the real model (Phase 4), the next rung is a Static Space for the page plus an external backend (Hugging Face says Static Spaces are free for everyone). The first action is to ask the team whether to (a) pay for PRO, which makes the first plan work again, or (b) split the app into a Static Space and a backend hosted elsewhere, then re-run plan 01-07's probe steps against the chosen target and update this ADR.
 
-Status is **Blocked** only because the funding question is open. Hosting itself is resolved for now.
+Status was **Blocked** only because the funding question was open; it is now resolved by the update below (Gemini API key). Hosting is resolved for now.
+
+## Update (2026-10-25): team decisions
+
+The team looked at the options above and decided, for this college project:
+
+1. **Hosting: keep the private ZeroGPU Gradio Space.** No PRO upgrade and no Static Space split. The earlier "Fallback" line stays as the plan B if ZeroGPU stops working for the real model in Phase 4.
+2. **LLM: use the Google Gemini API with the team's own API key**, instead of Hugging Face Inference Providers. This is option 3 above ("bring your own key"). Hugging Face is still used for the dataset, the model weights and the Space, just not for chat inference. The key goes in the local `.env` (planned name `GEMINI_API_KEY`, to be added to `.env.example` in Phase 6), is never committed, and on the Space it is stored as a Space **secret**, never a Variable. Chat code talks to a provider interface, so swapping providers later is a settings change.
+
+What this does NOT change: the budget limit, per-session rate limits and the "degraded mode" message (for when the API key runs out of quota or the API is down) stay required in Phase 6/7. Free API tiers have request limits, and the free tier's data terms should be re-read before real farmers use the app. The exact Gemini model id will be picked and tested (including Hindi quality) at the start of Phase 6.
 
 ## Consequences for later phases
 

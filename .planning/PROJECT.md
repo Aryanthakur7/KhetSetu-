@@ -20,7 +20,7 @@ A farmer gets a correct, trustworthy disease diagnosis from a leaf photo, and an
 - [ ] Fine-tune a Hugging Face image-classification transformer (ViT / Swin / ConvNeXt family; benchmark 2-3 candidates) on the dataset, with augmentation aimed at real field photos
 - [ ] Confidence gate: below a threshold (or for non-leaf images) the app declines to diagnose and asks for a clearer photo
 - [ ] Farmer uploads an image and receives disease label, confidence, and a short summary
-- [ ] Chat about the diagnosed disease in Hindi and English, powered by an LLM through the Hugging Face Inference API
+- [ ] Chat about the diagnosed disease in Hindi and English, powered by the Google Gemini API (team API key, behind a provider interface)
 - [ ] RAG over a curated, scheduled-scrape store of agricultural sources (e.g. ICAR, state agriculture universities, FAO) with a live web-search fallback when curated data has no answer
 - [ ] Remedy answers cite their sources and include safety framing for any chemical/pesticide advice
 - [ ] Backend (`backend/`) and frontend (`frontend/`) are separate packages in one repo; Gradio frontend consumes the backend service layer
@@ -33,7 +33,7 @@ A farmer gets a correct, trustworthy disease diagnosis from a leaf photo, and an
 - Object detection / DETR — the dataset has image-level labels only, no bounding boxes; revisit only if multi-leaf localisation is wanted later
 - Indian languages beyond Hindi and English — larger scope, later phase
 - Two-Space (separate BE API / FE) deployment — layout allows it later, v1 ships one Space
-- Self-hosted LLM — HF Inference API chosen to avoid GPU hosting
+- Self-hosted LLM — Gemini API chosen to avoid GPU hosting and HF Inference credits (team decision 2026-10-25)
 - Retraining on collected farmer photos — v2, needs a data collection pipeline
 - Native mobile app — web (Gradio) first
 
@@ -47,7 +47,7 @@ A farmer gets a correct, trustworthy disease diagnosis from a leaf photo, and an
 
 ## Constraints
 
-- **Platform**: Hugging Face (datasets, model hub, Inference API, Spaces) — team decision
+- **Platform**: Hugging Face (datasets, model hub, Spaces) — team decision; LLM chat uses the Google Gemini API instead of HF Inference (2026-10-25)
 - **Frontend**: Gradio — fast to build, native to Spaces
 - **Deployment**: Single HF Space — simplest to operate; free/low tier limits compute, so inference must be lightweight
 - **Account**: Team is on a FREE Hugging Face account. Research (HF docs, 2026-10-23) reports Gradio/Docker Space creation needs a paid plan and Inference Providers gives free users no credits. Unverified for this account — Phase 1 verifies with a hello-world deploy and, if blocked, picks a fallback (ZeroGPU Space, Static Space + external backend, or other hosting) before architecture hardens. LLM access sits behind a provider interface so the backend can change without touching chat logic.
@@ -61,13 +61,13 @@ A farmer gets a correct, trustworthy disease diagnosis from a leaf photo, and an
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Image-classification transformer (ViT/Swin/ConvNeXt), not DETR | Dataset has image-level labels only; DETR needs boxes | — Pending |
-| LLM via HF Inference API | No GPU hosting, stays in HF stack | — Pending |
+| LLM via Google Gemini API (own API key), replacing HF Inference API | HF Inference gave no free credits (HTTP 402); Gemini key is simple and handles Hindi; provider stays behind an interface | ✓ Decided 2026-10-25 (model id + Hindi quality tested in Phase 6) |
 | Hindi + English | Target farmers; needs multilingual LLM and Hindi sources | — Pending |
 | One HF Space, separate `backend/` and `frontend/` folders | Simple deploy now, cheap split later | — Pending |
 | Augmentation + confidence gate for field photos | PlantVillage is lab imagery; avoid confident wrong diagnoses | — Pending |
 | RAG: curated scheduled scrape + live search fallback | Trustworthy default, coverage fallback | — Pending |
 | Dataset auto-download in training/eval/dev entrypoints, not at Space boot | 823 MB is only needed for training; Space disk is ephemeral and boot would risk cold-start timeouts | — Pending |
-| Free HF account; hosting/LLM funding verified in Phase 1 | Research says Space creation and Inference credits need a paid plan; unverified | Verified 2026-10-25: free CPU Basic Gradio Space refused (HTTP 402); private ZeroGPU Gradio Space works as interim hosting with sys.path packaging; LLM calls get HTTP 402 (no credits), funding UNRESOLVED (options: PRO, buy credits, other provider key); fallback: Static Space + external backend (ADR 0001) |
+| Free HF account; hosting/LLM funding verified in Phase 1 | Research says Space creation and Inference credits need a paid plan; unverified | Verified 2026-10-25: free CPU Basic Gradio Space refused (HTTP 402); private ZeroGPU Gradio Space works as interim hosting with sys.path packaging; LLM calls get HTTP 402 (no credits), funding UNRESOLVED (options: PRO, buy credits, other provider key); fallback: Static Space + external backend (ADR 0001). 2026-10-25 team decision: keep the private ZeroGPU Space; LLM via Gemini API key instead of HF credits |
 | Evidence-driven model choice: field-set macro-F1, calibration, CPU latency (not PlantVillage accuracy) | PlantVillage accuracy is inflated by leakage and lab backgrounds | — Pending |
 
 ## Evolution
