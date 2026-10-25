@@ -6,14 +6,28 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Protocol
 
 if TYPE_CHECKING:
-    from khetsetu_contracts.models import DiagnosisRequest, DiagnosisResult
+    from khetsetu_contracts.models import DiagnosisRequest, DiagnosisResult, Readiness
 
 
 class DiagnosisService(Protocol):
     """Diagnoses a leaf photo."""
 
     def diagnose(self, request: DiagnosisRequest) -> DiagnosisResult:
-        """Return the diagnosis for ``request``."""
+        """Return the diagnosis for ``request``.
+
+        Raises:
+            InvalidImageError: The bytes are not a readable image.
+            ImageTooLargeError: The image is too large in bytes or pixels.
+            NotReadyError: The service is still starting.
+        """
+        ...
+
+
+class HealthService(Protocol):
+    """Reports whether the services are up, and whether they are fakes."""
+
+    def readiness(self) -> Readiness:
+        """Return the current readiness."""
         ...
 
 
@@ -22,3 +36,4 @@ class Services:
     """The service objects the composition root hands to the frontend."""
 
     diagnosis: DiagnosisService
+    health: HealthService

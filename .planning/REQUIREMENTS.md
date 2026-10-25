@@ -11,10 +11,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **FND-01**: Developer can configure the whole app through typed, validated settings loaded from `.env`, and the app fails fast at startup with a clear message when a required setting is missing or invalid
 - [x] **FND-02**: Developer can onboard from a committed `.env.example` that documents every setting, and no secret or token is ever committed (enforced by a secret scan)
-- [ ] **FND-03**: Developer can run any training, evaluation or dev entrypoint and have the dataset `Project-AgML/plant_village_classification` downloaded first, idempotently and from cache when already present
-- [x] **FND-04**: Contributor's change is blocked in CI unless ruff, mypy (strict), pytest, import-linter and the secret scan all pass
-- [ ] **FND-05**: Developer can verify with a hello-world Space deploy whether a free Hugging Face account can host the Gradio app, how the `backend/` and `frontend/` packages install on the Space, and how LLM calls are funded, before dependent work is built
-- [ ] **FND-06**: Repo keeps `backend/` and `frontend/` as separate packages, with the frontend depending only on a typed `contracts/` layer and a single composition root wiring them together
+- [x] **FND-03**: Developer can run any training, evaluation or dev entrypoint and have the dataset `Project-AgML/plant_village_classification` downloaded first, idempotently and from cache when already present
+- [ ] **FND-04**: Contributor's change is blocked in CI unless ruff, mypy (strict), pytest, import-linter and the secret scan all pass
+- [x] **FND-05**: Developer can verify with a hello-world Space deploy whether a free Hugging Face account can host the Gradio app, how the `backend/` and `frontend/` packages install on the Space, and how LLM calls are funded, before dependent work is built
+- [x] **FND-06**: Repo keeps `backend/` and `frontend/` as separate packages, with the frontend depending only on a typed `contracts/` layer and a single composition root wiring them together
 
 ### Data & Evaluation
 
@@ -107,10 +107,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | FND-01 | Phase 1 | Complete |
 | FND-02 | Phase 1 | Complete |
-| FND-03 | Phase 1 | Pending |
-| FND-04 | Phase 1 | Complete |
-| FND-05 | Phase 1 | Pending |
-| FND-06 | Phase 1 | In Progress |
+| FND-03 | Phase 1 | Complete |
+| FND-04 | Phase 1 | In Progress (CI unproven until first GitHub run + branch protection) |
+| FND-05 | Phase 1 | Complete |
+| FND-06 | Phase 1 | Complete |
 | DATA-01 | Phase 2 | Pending |
 | DATA-02 | Phase 2 | Pending |
 | DATA-03 | Phase 2 | Pending |

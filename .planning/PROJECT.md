@@ -67,7 +67,7 @@ A farmer gets a correct, trustworthy disease diagnosis from a leaf photo, and an
 | Augmentation + confidence gate for field photos | PlantVillage is lab imagery; avoid confident wrong diagnoses | — Pending |
 | RAG: curated scheduled scrape + live search fallback | Trustworthy default, coverage fallback | — Pending |
 | Dataset auto-download in training/eval/dev entrypoints, not at Space boot | 823 MB is only needed for training; Space disk is ephemeral and boot would risk cold-start timeouts | — Pending |
-| Free HF account; hosting/LLM funding verified in Phase 1 | Research says Space creation and Inference credits need a paid plan; unverified | ⚠️ Revisit |
+| Free HF account; hosting/LLM funding verified in Phase 1 | Research says Space creation and Inference credits need a paid plan; unverified | Verified 2026-10-25: free CPU Basic Gradio Space refused (HTTP 402); private ZeroGPU Gradio Space works as interim hosting with sys.path packaging; LLM calls get HTTP 402 (no credits), funding UNRESOLVED (options: PRO, buy credits, other provider key); fallback: Static Space + external backend (ADR 0001) |
 | Evidence-driven model choice: field-set macro-F1, calibration, CPU latency (not PlantVillage accuracy) | PlantVillage accuracy is inflated by leakage and lab backgrounds | — Pending |
 
 ## Evolution

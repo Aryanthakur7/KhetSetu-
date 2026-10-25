@@ -17,7 +17,7 @@ KhetSetu goes from an empty repo to a farmer-facing Hugging Face Space in seven 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Walking Skeleton & Hosting Verification** - CI-gated, typed, deployed hello-world Space that proves hosting, packaging and LLM funding
+- [x] **Phase 1: Walking Skeleton & Hosting Verification** - CI-gated, typed, deployed hello-world Space that proves hosting, packaging and LLM funding (completed 2026-10-25)
 - [ ] **Phase 2: Trustworthy Data & Field Probe** - Frozen leak-free split, field/non-leaf probe set, label metadata and the supported-crops list
 - [ ] **Phase 3: Gated Classifier** - Reproducible training, 3-backbone benchmark, field augmentation, calibrated refusal gate, Hub artifacts
 - [ ] **Phase 4: Farmer Diagnosis** - Photo in, honest diagnosis or retake request out, with summary card and warming-up page
@@ -40,7 +40,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Running any training, evaluation or dev entrypoint first downloads `Project-AgML/plant_village_classification`; a second run reuses the cache and downloads nothing.
   5. A change that breaks ruff, strict mypy, pytest, import-linter or the secret scan is blocked in CI, and `data/`, model weights and secrets cannot be committed by accident.
 
-**Plans**: 3/7 plans executed
+**Plans**: 7/7 plans complete
 
 Plans:
 **Wave 1**
@@ -51,16 +51,16 @@ Plans:
 - [x] 01-03-PLAN.md — CI gates: ruff, mypy strict, pytest, import-linter (frontend depends on contracts only), gitleaks secret scan, pre-commit, with canary tests proving each gate bites
 
 **Wave 3** *(blocked on Wave 2 completion)*
-- [ ] 01-04-PLAN.md — Tracer slice: fake services behind `contracts/`, single composition root, hello-world Gradio upload-to-result app running locally
+- [x] 01-04-PLAN.md — Tracer slice: fake services behind `contracts/`, single composition root, hello-world Gradio upload-to-result app running locally
 
 **Wave 4** *(blocked on Wave 3 completion)*
-- [ ] 01-05-PLAN.md — Idempotent, cached `ensure_dataset()` wired into every training, evaluation and dev entrypoint (decorator plus policy test); Space and CI never download
+- [x] 01-05-PLAN.md — Idempotent, cached `ensure_dataset()` wired into every training, evaluation and dev entrypoint (decorator plus policy test); Space and CI never download
 
 **Wave 5** *(blocked on Wave 4 completion)*
-- [ ] 01-06-PLAN.md — Space bundle builder, Space-faithful local rehearsal (packaging: editable install vs `sys.path`), probe tooling, architecture and hosting docs
+- [x] 01-06-PLAN.md — Space bundle builder, Space-faithful local rehearsal (packaging: editable install vs `sys.path`), probe tooling, architecture and hosting docs
 
 **Wave 6** *(blocked on Wave 5 completion)*
-- [ ] 01-07-PLAN.md — Human gate (HF token), live Space deploy on the real account, packaging comparison on the real build, LLM-funding probe, recorded hosting, packaging and funding decision with fallback (ADR 0001)
+- [x] 01-07-PLAN.md — Human gate (HF token), live Space deploy on the real account, packaging comparison on the real build, LLM-funding probe, recorded hosting, packaging and funding decision with fallback (ADR 0001)
 
 ### Phase 2: Trustworthy Data & Field Probe
 
@@ -197,7 +197,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 (Phase 5 ingest
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Walking Skeleton & Hosting Verification | 3/7 | In Progress | - |
+| 1. Walking Skeleton & Hosting Verification | 7/7 | Complete    | 2026-10-25 |
 | 2. Trustworthy Data & Field Probe | 0/4 | Not started | - |
 | 3. Gated Classifier | 0/5 | Not started | - |
 | 4. Farmer Diagnosis | 0/4 | Not started | - |

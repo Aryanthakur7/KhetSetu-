@@ -76,9 +76,9 @@ plugins = ["pydantic.mypy"]
 mypy_path = "contracts/src:backend/src:frontend/src"
 explicit_package_bases = true
 namespace_packages = true
-# Only paths that exist now: plan 01-06 adds scripts.
 files = [
     "app.py",
+    "scripts",
     "contracts/src",
     "backend/src",
     "frontend/src",
@@ -92,6 +92,16 @@ files = [
 init_forbid_extra = true
 init_typed = true
 warn_required_dynamic_aliases = true
+
+[[tool.mypy.overrides]]
+# gradio_client ships no type information; it is only used by the end-to-end test.
+module = ["gradio_client", "gradio_client.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# pyarrow ships no type information; it is only used to count rows in backend/data/summary.py.
+module = ["pyarrow", "pyarrow.*"]
+ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 # Module names are rooted at the repo (explicit_package_bases), e.g. contracts.tests.test_x.
@@ -121,6 +131,15 @@ markers = [
 ]
 filterwarnings = [
     "error",
+    # Gradio creates asyncio event loops and sockets (when a Blocks app is built and when its
+    # server starts) and never closes them. Python reports this as a ResourceWarning when they
+    # are garbage collected, which "error" would turn into a failure. Only these two
+    # third-party messages are ignored; every other warning is still an error.
+    "ignore:unclosed event loop:ResourceWarning",
+    "ignore:unclosed <socket.socket:ResourceWarning",
+    # Gradio 6.30.0 uses pandas options that pandas 4 deprecates (its request-timing summary).
+    # KhetSetu code does not use pandas itself, so this only hides Gradio's internal use.
+    "ignore::pandas.errors.Pandas4Warning",
 ]
 
 # ------------------------------------------------------------------------- coverage

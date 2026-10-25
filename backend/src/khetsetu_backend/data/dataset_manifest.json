@@ -1,0 +1,21 @@
+{
+  "repo_id": "Project-AgML/plant_village_classification",
+  "revision": "cb08789a92460034ced0449eac1dba72bb4883da",
+  "files": [
+    {
+      "path": "README.md",
+      "size": 4193,
+      "sha256": "335db68cf188a522d46fc24609bc7718cc0aaa4f65cd0c732ccacc680e588750"
+    },
+    {
+      "path": "data/train-00000-of-00002.parquet",
+      "size": 431265906,
+      "sha256": "ff914e1bc5c7c4467377ca4a28ab2bc06f79afd735300d2ee61e6a376bd52dbf"
+    },
+    {
+      "path": "data/train-00001-of-00002.parquet",
+      "size": 431631981,
+      "sha256": "f6b6b6e17050e6aa1e20c2a16de80bde00a64911ac46c4e8a463ec1f51176cf3"
+    }
+  ]
+}
